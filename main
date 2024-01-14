@@ -1,0 +1,340 @@
+import random
+import time
+
+turn = 0
+game = True
+
+print("THE GAMBLER AND THE DESPERATE.")
+print("TAKE TURNS EITHER SHOOTING YOURSELF OR THE GAMBLER.")
+time.sleep(1)
+print("3 LIVES. ITEM EVERY ROUND. ")
+print("BEER- +1 HEALTH , CUFFS- 1 EXTRA TURN")
+print("GLASS- SEE CHAMBER , SAW- 2x DAMAGE")
+print("SHOOTING YOURSELF MEANS YOU GET ANOTHER SHOT.")
+time.sleep(1)
+      
+      
+class TheGambler:
+    def __init__(self, health, itemcount):
+        self.health = health
+        self.itemcount = itemcount
+
+    def useitemgambler(self, itemname):
+
+        if itemname == 1: # BEER
+            if self.health > 4:
+                self.health = self.health
+            else:
+                self.health = self.health + 1
+
+        if itemname == 2: # GLASS
+            chambered = binaryammosequencelist[0]
+            print("The first round is: " + str(chambered))
+            if chambered == 0:
+                Shotgun.fire("GAMBLERSELF", 0)
+            else:
+                Shotgun.fire("GAMBLERPLAYER", 0)
+
+        if itemname == 3: # CUFFS
+            Shotgun.fire(Player, 2)
+
+        if itemname == 4: #SAW
+            Shotgun.fire(Player, 1)
+
+
+
+
+    def turn(self):
+        if self.health > 0:
+            print("My turn.")
+            self.itemcount = self.itemcount + 1
+            time.sleep(1)
+            print("What do we have here...")
+            if self.itemcount > 0:
+                itemcheck = random.randint(1,4)
+
+                if itemcheck == 1:
+                    print("Declicious.")
+                    time.sleep(1)
+                    print("Gambler drunk beer.")
+                    Gambler.useitemgambler(1)
+
+                elif itemcheck == 2:
+                    print("Intresting...")
+                    time.sleep(1)
+                    print("Gambler used Glass.")
+                    Gambler.useitemgambler(2)
+
+                elif itemcheck == 3:
+                        print("Hope you're lucky.")
+                        time.sleep(1)
+                        print("Gambler used cuffs.")
+                        Gambler.useitemgambler(3)
+
+                elif itemcheck == 4:
+                        print("This might hurt.")
+                        time.sleep(1)
+                        print("Gambler used saw.")
+                        Gambler.useitemgambler(4)
+
+        else:
+            print("Game over. You win. Until we meet again.")
+            game == False
+
+
+
+class Gun:
+    def __init__(self, ammo):
+        self.ammo = ammo
+
+    def fire(self, target, mod):
+        chambered =  binaryammosequencelist[0]
+        if target == "YOU":
+            if mod == 0: #NORMAL
+                if chambered == 0:
+                    Player.health = Player.health
+                    print("Chamber had a blank. Your Health is "+ str(Player.health))
+                    global turn
+                    turn = turn + 2
+                else:
+                    Player.health = Player.health - 1
+                    print("Chamber had a live round. Your Health is " + str(Player.health))
+                    turn = turn + 1
+
+            elif mod == 1:   #SAW
+                if chambered == 0:
+                    Player.health = Player.health
+                    print("Chamber had a blank. Your Health is " + str(Player.health))
+                    turn = turn + 2
+
+                else:
+                    Player.health = Player.health - 2
+                    print("Chamber had a live. Your Health is " + str(Player.health))
+                    turn = turn + 1
+
+            elif mod == 2:   #CUFFS
+                if chambered == 0:
+                    Player.health = Player.health
+                    print("Chamber had a blank. Your Health is " + str(Player.health))
+                    turn = turn + 2
+
+                else:
+                    Player.health = Player.health - 1
+                    print("Chamber had a live. Your Health is " + str(Player.health))
+                    turn = turn + 2
+
+
+        elif target == "GAMBLER":
+            chambered = binaryammosequencelist[0]
+            if mod == 0:
+                if chambered == 0:
+                    Gambler.health = Gambler.health
+                    print("Chamber had a blank. Gambler Health is " + str(Gambler.health))
+                    turn = turn + 1
+                else:
+                    Gambler.health = Gambler.health - 1
+                    print("Chamber had a live. Gambler Health is " + str(Gambler.health))
+                    turn = turn + 1
+
+            elif mod == 1:
+                if chambered == 0:
+                    Gambler.health = Gambler.health
+                    print("Chamber had a blank. Gambler Health is " + str(Gambler.health))
+                    turn = turn + 1
+                else:
+                    Gambler.health = Gambler.health - 2
+                    print("Chamber had a live. Gambler Health is " + str(Gambler.health))
+                    turn = turn + 1
+
+            elif mod == 2:
+                if chambered == 0:
+                    Gambler.health = Gambler.health
+                    print("Chamber had a blank. Gambler Health is " + str(Gambler.health))
+                    turn = turn + 2
+                else:
+                    Gambler.health = Gambler.health - 2
+                    print("Chamber had a live. Gambler Health is " + str(Gambler.health))
+                    turn = turn + 2
+
+        elif target == "GAMBLERSELF":
+            if mod == 0:
+                if chambered == 0:
+                    Gambler.health = Gambler.health
+                    print("Chamber had a blank. Gambler Health is " + str(Gambler.health))
+                    turn = turn + 2
+
+
+        elif target == "GAMBLERPLAYER":
+            if mod == 0:
+                if chambered == 0:
+                    Player.health = Player.health
+                    print("Chamber had a blank. Player Health is " + str(Player.health))
+                    time.sleep(1)
+                    print("Lucky.")
+                    turn = turn + 1
+                else:
+                    Player.health = Player.health - 1
+                    print("Chamber had a live. Gambler Health is " + str(Gambler.health))
+                    time.sleep(1)
+                    print("That look like it hurt.")
+                    turn = turn + 1
+
+
+ammosequence = random.randint(2, 65536)
+binaryammosequence = bin(ammosequence)[2:].zfill(16)
+binaryammosequencelist = [*map(int,str(binaryammosequence))]
+
+Shotgun = Gun(binaryammosequencelist)
+#print("testing ammo is " + str(Shotgun.ammo))
+
+class Player:
+    def __init__(self, health, itemcount, beercount, sawcount, glasscount, cuffscount):
+        self.health = health
+        self.itemcount = itemcount
+        self.beercount = beercount
+        self.sawcount = sawcount
+        self.glasscount = glasscount
+        self.cuffscount = cuffscount
+
+    def useitem(self, itemname):
+
+        if itemname == 1: #BEER
+            if Player.health > 4:
+                Player.health = Player.health
+
+                target = input("BEER DRUNK. MAX HEALTH, NO CHANGES.'"
+                               "\nSHOOT: YOU or GAMBLER ")
+                if target == "YOU":
+                    Shotgun.fire("YOU", 0)
+                else:
+                    Shotgun.fire("GAMBLER", 0)
+
+            else:
+                Player.health = Player.health + 1
+                print("BEER DRUNK. +1 HEALTH. NOW ON: "+ str(Player.health))
+
+                target = input("SHOOT: YOU or GAMBLER")
+                if target == "YOU":
+                    Shotgun.fire("YOU", 0)
+                else:
+                    Shotgun.fire("GAMBLER", 0)
+
+        elif itemname == 2: #GLASS
+            chambered = binaryammosequencelist[0]
+            print("The first round is: " + str(chambered))
+            target = input("SHOOT: YOU or GAMBLER")
+            if target == "YOU":
+                Shotgun.fire("YOU", 0)
+            else:
+                Shotgun.fire("GAMBLER", 0)
+
+        elif itemname == 3: #SAW
+            playerchoice = input("DAMAGE IS DOUBLE. SHOOT: YOU or GAMBLER")
+            if playerchoice == "YOU":
+                Shotgun.fire("YOU", 1)
+                turn + 2
+            else:
+                Shotgun.fire("GAMBLER", 1)
+                turn + 2
+
+        elif itemname == 4: #CUFFS
+            target = input("GAMBLED CUFFED. SHOOT: YOU or GAMBLER")
+            if target == "YOU":
+                Shotgun.fire("YOU", 2)
+            elif target == "GAMBLER":
+                Shotgun.fire("YOU", 2)
+
+        else:
+            target = input("SHOOT: YOU or GAMBLER")
+            if target == "YOU":
+                Shotgun.fire("YOU", 0)
+            else:
+                Shotgun.fire("GAMBLER", 0)
+
+    def turn(self):
+        if self.health > 0:
+            itemgen = random.randint(1,4)
+            Player.itemcount = Player.itemcount + 1
+            if itemgen == 1:
+                self.beercount = self.beercount + 1
+            elif itemgen == 2:
+                self.glasscount = self.glasscount + 1
+            elif itemgen == 3:
+                self.cuffscount = self.cuffscount + 1
+            else:
+                self.sawcount = self.sawcount + 1
+
+            print("YOU HAVE... " + str(self.beercount) + "BEER "
+                  + str(self.glasscount) + "GLASS "
+                  + str(self.cuffscount) + "CUFFS "
+                  + str(self.sawcount) + "SAW \n")
+
+            playerchoice = input("ITEM or SHOOT ")
+
+            if playerchoice == "ITEM":
+                if Player.itemcount > 0:
+                    itemcheck = input("BEER or GLASS or SAW or CUFFS ")
+                    if itemcheck == "BEER":
+                        if self.beercount > 0:
+                            Player.useitem(1)
+                            self.beercount = self.beercount - 1
+
+                        else:
+                            print("NO BEER")
+
+                    elif itemcheck == "GLASS":
+                        if self.glasscount > 0:
+                            Player.useitem(2)
+                            self.glasscount = self.glasscount - 1
+
+                        else:
+                            print("NO GLASS")
+
+                    elif itemcheck == "SAW":
+                        if self.sawcount > 0:
+                            Player.useitem(3)
+                            self.sawcount = self.sawcount - 1
+                        else:
+                            print("NO SAW")
+
+                    elif itemcheck == "CUFFS":
+                        if self.cuffscount > 0:
+                            Player.useitem(4)
+                            self.cuffscount = self.cuffscount - 1
+
+                        else:
+                            print("NO CUFFS")
+
+                    else:
+                        playerchoice = "SHOOT"
+                else:
+                    playerchoice = "SHOOT"
+
+            else:
+                target = input("YOU or GAMBLER ")
+                if target == "YOU":
+                    Shotgun.fire("YOU", 0)
+                else:
+                    Shotgun.fire("GAMBLER", 0)
+        else:
+            print("Game over. No more lives this time.")
+            game == False
+
+
+
+
+Gambler = TheGambler(3, 0)
+Player = Player(3, 0, 0, 0, 0, 0)
+
+while game == True:
+    if (turn % 2) == 0:
+        print("\nGAMBLERHEALTH " + str(Gambler.health) + ". YOURHEALTH " + str(Player.health))
+        time.sleep(1)
+        print("PLAYERS TURN.")
+        Player.turn()
+
+    elif (turn % 2) != 0:
+        print("\nGAMBLERHEALTH " + str(Gambler.health) + ". YOURHEALTH " + str(Player.health))
+        time.sleep(1)
+        print("GAMBLERS TURN.")
+        Gambler.turn()
